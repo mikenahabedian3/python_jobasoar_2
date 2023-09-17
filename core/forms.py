@@ -16,6 +16,7 @@ def parse_xml(xml_file):
         root = tree.getroot()
 
         for job in root.findall('job'):
+            job_id = job.find('job_id').text  # Extract job_id from XML
             title = job.find('title').text
             description = job.find('description').text
             employer_name = job.find('employer').text
@@ -31,6 +32,7 @@ def parse_xml(xml_file):
             job_type = job.find('jobType').text
 
             Job.objects.create(
+                xml_job_id=job_id,  # Save job_id from XML into the new field
                 title=title,
                 description=description,
                 employer=employer,

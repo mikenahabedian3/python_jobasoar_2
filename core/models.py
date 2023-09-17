@@ -33,7 +33,7 @@ class Job(models.Model):
         ('hourly', 'Hourly'),
     ]
 
-    job_id = models.AutoField(primary_key=True)
+    xml_job_id = models.CharField(max_length=255, null=True, blank=True)  # New field to store job_id from XML
     title = models.CharField(max_length=255)
     description = models.TextField()
     employer = models.ForeignKey(Company, on_delete=models.CASCADE)
