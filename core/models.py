@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils.crypto import get_random_string
 
 
 class Company(models.Model):
@@ -26,6 +27,10 @@ class JobSeeker(models.Model):
         return self.user.username
 
 
+def create_reference_id():
+    return get_random_string(length=16)
+
+
 class Job(models.Model):
     JOB_TYPE_CHOICES = [
         ('full-time', 'Full-Time'),
@@ -43,6 +48,7 @@ class Job(models.Model):
     apply_url = models.URLField(max_length=200)
     salary = models.CharField(max_length=255, null=True, blank=True)
     job_type = models.CharField(max_length=50, choices=JOB_TYPE_CHOICES)
+    reference_id = models.CharField(max_length=16, default=create_reference_id, unique=True)  # Corrected the indentation
 
     def __str__(self):
         return self.title
