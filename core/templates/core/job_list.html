@@ -3,7 +3,11 @@
 {% block content %}
 <ul>
     {% for job in jobs %}
-    <li><a href="{% url 'job_detail' job.id %}">{{ job.title }}</a></li>
+    <li><a href="{% url 'job_detail' reference_id=job.reference_id %}">{{ job.title }}</a></li>
     {% endfor %}
 </ul>
 {% endblock %}
+
+
+
+

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -38,6 +38,6 @@ def job_list(request):
     jobs = Job.objects.all()
     return render(request, 'core/job_list.html', {'jobs': jobs})
 
-def job_detail(request, job_id):
-    job = Job.objects.get(pk=job_id)
+def job_detail(request, reference_id):
+    job = get_object_or_404(Job, reference_id=reference_id)
     return render(request, 'core/job_detail.html', {'job': job})

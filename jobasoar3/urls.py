@@ -12,5 +12,5 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),  # Updated to use views.dashboard
     path('upload_xml/', views.upload_xml, name='upload_xml'),
     path('jobs/', views.job_list, name='job_list'),
-    path('jobs/<int:job_id>/', views.job_detail, name='job_detail'),
+    path('jobs/<str:reference_id>/', views.job_detail, name='job_detail'),  # Only reference_id pattern
 ]
