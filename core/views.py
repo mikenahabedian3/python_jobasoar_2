@@ -1,9 +1,10 @@
-# core/views.py
-
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+
+from .forms import XMLUploadForm, parse_xml
+from .models import Job
 
 def signup(request):
     if request.method == 'POST':
@@ -23,4 +24,20 @@ def home(request):
 def dashboard(request):
     return render(request, 'core/dashboard.html')
 
+def upload_xml(request):
+    if request.method == 'POST':
+        form = XMLUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            parse_xml(request.FILES['xml_file'])
+            return redirect('job_list')
+    else:
+        form = XMLUploadForm()
+    return render(request, 'core/upload_xml.html', {'form': form})
 
+def job_list(request):
+    jobs = Job.objects.all()
+    return render(request, 'core/job_list.html', {'jobs': jobs})
+
+def job_detail(request, job_id):
+    job = Job.objects.get(pk=job_id)
+    return render(request, 'core/job_detail.html', {'job': job})
