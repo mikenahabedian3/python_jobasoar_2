@@ -1,3 +1,48 @@
+from django.contrib.auth.models import User
 from django.db import models
 
-# Create your models here.
+
+class Company(models.Model):
+    name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.name
+
+
+class CompanyUser(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.user.username
+
+
+class JobSeeker(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.user.username
+
+
+class Job(models.Model):
+    JOB_TYPE_CHOICES = [
+        ('full-time', 'Full-Time'),
+        ('part-time', 'Part-Time'),
+        ('hourly', 'Hourly'),
+    ]
+
+    job_id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    employer = models.ForeignKey(Company, on_delete=models.CASCADE)
+    location = models.CharField(max_length=255)
+    date_posted = models.DateTimeField()
+    promoted = models.BooleanField(default=False)
+    apply_url = models.URLField(max_length=200)
+    salary = models.CharField(max_length=255, null=True, blank=True)
+    job_type = models.CharField(max_length=50, choices=JOB_TYPE_CHOICES)
+
+    def __str__(self):
+        return self.title
