@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+  <style>
+    body, html {
+      background-color: black;
+      color: purple;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid purple;
+      padding: 10px;
+    }
+
+    header nav ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    header nav ul li {
+      display: inline;
+      margin: 0 10px;
+    }
+
+    header nav ul li a {
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+
+    header nav ul li a.green {
+      background-color: lime;
+    }
+
+    header nav ul li a.purple {
+      background-color: purple;
+    }
+
+    main {
+      margin-top: 20px;
+      padding: 10px;
+    }
+
+    a {
+      color: purple;
+    }
+
+    a:hover {
+      color: lime;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a href="/">
+      <img src="{% static 'logo.png' %}" alt="Logo" style="height: 50px;">
+    </a>
+    <nav>
+      <ul>
+        <li><a href="/login" class="purple">Log In</a></li>
+        <li><a href="/signup" class="green">Sign Up</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  {% if request.user.is_authenticated %}
+  <nav style="padding: 10px;">
+    <ul style="list-style-type: none; padding: 0;">
+      <li style="display: inline; margin: 0 10px;">{{ request.user.username }}</li>
+      <li style="display: inline; margin: 0 10px;">{{ request.user.email }}</li> 
+      <li style="display: inline; margin: 0 10px;"><a href="/logout" style="color: purple;">Log Out</a></li>
+    </ul>
+  </nav>
+  {% endif %}
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+
+</body>
+</html>
