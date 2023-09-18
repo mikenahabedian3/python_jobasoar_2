@@ -1,13 +1,52 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<ul>
+<style>
+    .jobs-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 2em;
+    }
+    .job-card {
+        background-color: #f8f9fa;
+        padding: 1.5em;
+        margin-bottom: 1em;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        width: 100%;
+        transition: transform 0.2s;
+        text-decoration: none;
+    }
+    .job-card:hover {
+        transform: scale(1.02);
+        text-decoration: none;
+    }
+    .job-title {
+        color: #333;
+        font-weight: bold;
+        font-size: 1.2em;
+    }
+    .job-details {
+        margin-top: 0.5em;
+        color: #666;
+    }
+</style>
+
+<div class="jobs-container">
     {% for job in jobs %}
-    <li><a href="{% url 'job_detail' reference_id=job.reference_id %}">{{ job.title }}</a></li>
+        <a href="{% url 'job_detail' reference_id=job.reference_id %}" class="job-card">
+            <div class="job-title">
+                {{ job.title }}
+            </div>
+            <div class="job-details">
+                <p><strong>Company:</strong> {{ job.employer.name }}</p>
+                <p><strong>Location:</strong> {{ job.location }}</p>
+                <p><strong>Date Posted:</strong> {{ job.date_posted|date:"F j, Y" }}</p>
+                <p><strong>Job Type:</strong> {{ job.job_type }}</p>
+            </div>
+        </a>
     {% endfor %}
-</ul>
+</div>
 {% endblock %}
-
-
-
-
