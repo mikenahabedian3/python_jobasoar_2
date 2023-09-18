@@ -1,0 +1,14 @@
+<jobs>
+    <job>
+        <job_id>1</job_id>
+        <title>Software Engineer</title>
+        <description>Develop and maintain software</description>
+        <employer>ABC Corp</employer>
+        <location>NY, USA</location>
+        <datePosted>2023-09-15T10:20:30Z</datePosted>
+        <promoted>true</promoted>
+        <applyUrl>http://example.com/apply</applyUrl>
+        <salary>60000</salary>
+        <jobType>Full-time</jobType>
+    </job>
+</jobs>

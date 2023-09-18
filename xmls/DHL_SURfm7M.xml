@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jobListings>
+  <job>
+    <job_id>1</job_id>
+    <title>Logistics Coordinator</title>
+    <description>
+      Responsible for coordinating and overseeing the safe and secure handling of goods. Must have a background in logistics and excellent organizational skills.
+    </description>
+    <employer>DHL</employer>
+    <location>Los Angeles, CA, USA</location>
+    <datePosted>2023-09-15T00:00:00Z</datePosted>
+    <promoted>false</promoted>
+    <applyUrl>http://www.google.com</applyUrl>
+    <salary>$70,000 - $80,000</salary>
+    <jobType>Full-Time</jobType>
+  </job>
+</jobListings>

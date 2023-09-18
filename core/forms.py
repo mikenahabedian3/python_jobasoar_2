@@ -4,13 +4,12 @@ from django.db import transaction
 from django.utils.dateparse import parse_datetime
 from .models import Job, Company
 
-
 class XMLUploadForm(forms.Form):
     xml_file = forms.FileField()
-
+    company = forms.ModelChoiceField(queryset=Company.objects.all())
 
 @transaction.atomic
-def parse_xml(xml_file):
+def parse_xml(xml_file, company):
     try:
         tree = ET.parse(xml_file)
         root = tree.getroot()
@@ -19,10 +18,6 @@ def parse_xml(xml_file):
             xml_job_id = job.find('job_id').text  # get job_id from XML
             title = job.find('title').text
             description = job.find('description').text
-            employer_name = job.find('employer').text
-
-            # Get or create the employer (Company)
-            employer, created = Company.objects.get_or_create(name=employer_name)
 
             location = job.find('location').text
             date_posted = parse_datetime(job.find('datePosted').text)
@@ -32,10 +27,10 @@ def parse_xml(xml_file):
             job_type = job.find('jobType').text
 
             Job.objects.create(
-                xml_job_id=xml_job_id,  # Save job_id from XML into the new field
+                xml_job_id=xml_job_id,  
                 title=title,
                 description=description,
-                employer=employer,
+                employer=company,  # Use the company parameter here
                 location=location,
                 date_posted=date_posted,
                 promoted=promoted,
@@ -45,8 +40,7 @@ def parse_xml(xml_file):
             )
     except ET.ParseError as e:
         print(f"XML parse error: {e}")
-        # Ideally, replace print statements with proper logging
-        # handle the XML parse error (perhaps raise a custom exception)
+        # Replace print statements with proper logging in the future
     except Exception as e:
         print(f"An error occurred: {e}")
-        # handle other types of errors (perhaps raise a custom exception)
+        # Replace print statements with proper logging in the future

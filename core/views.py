@@ -4,7 +4,7 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 
 from .forms import XMLUploadForm, parse_xml
-from .models import Job
+from .models import Job, Company  # Importing Company model here
 
 def signup(request):
     if request.method == 'POST':
@@ -28,7 +28,10 @@ def upload_xml(request):
     if request.method == 'POST':
         form = XMLUploadForm(request.POST, request.FILES)
         if form.is_valid():
-            parse_xml(request.FILES['xml_file'])
+            # Get the selected company from the form
+            company = form.cleaned_data.get('company')
+            # Call the parse_xml function with the XML file and the company
+            parse_xml(request.FILES['xml_file'], company)
             return redirect('job_list')
     else:
         form = XMLUploadForm()

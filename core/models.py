@@ -6,7 +6,8 @@ from django.utils.crypto import get_random_string
 class Company(models.Model):
     name = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
-    
+    xml_file = models.FileField(upload_to='xmls/', null=True, blank=True)
+
     def __str__(self):
         return self.name
 

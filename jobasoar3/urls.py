@@ -1,7 +1,8 @@
 # jobasoar3/jobasoar3/urls.py
-
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 from core import views
 
 urlpatterns = [
@@ -14,3 +15,6 @@ urlpatterns = [
     path('jobs/', views.job_list, name='job_list'),
     path('jobs/<str:reference_id>/', views.job_detail, name='job_detail'),  # Only reference_id pattern
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -111,6 +111,11 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# added these two when trying to get XML feeds associated to Companies
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
 LOGIN_REDIRECT_URL = '/dashboard/'
 
 LOGOUT_REDIRECT_URL = '/'
