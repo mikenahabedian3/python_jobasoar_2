@@ -7,19 +7,33 @@ from django.db import models
 from .forms import XMLUploadForm, parse_xml
 from .models import Job, Company  # Importing Company model here
 
-def signup(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('dashboard')  # Redirect to dashboard instead of home
-    else:
-        form = UserCreationForm()
-    return render(request, 'registration/signup.html', {'form': form})
+from .forms import JobSeekerNarrativeForm
 
 def home(request):
-    return render(request, 'home.html')
+    if request.method == "POST":
+        form = JobSeekerNarrativeForm(request.POST)
+        if form.is_valid():
+            narrative = form.save()  # Removed user assignment here
+            # ... (we would now proceed to match the narrative with jobs here in future steps)
+            return redirect('dashboard')
+    else:
+        form = JobSeekerNarrativeForm()
+
+    return render(request, 'home.html', {'form': form})
+
+
+def home(request):
+    if request.method == "POST":
+        form = JobSeekerNarrativeForm(request.POST)
+        if form.is_valid():
+            narrative = form.save(commit=False)
+            narrative.user = request.user
+            narrative.save()
+            return redirect('dashboard')
+    else:
+        form = JobSeekerNarrativeForm()
+
+    return render(request, 'home.html', {'form': form})
 
 @login_required
 def dashboard(request):

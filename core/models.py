@@ -2,6 +2,13 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.crypto import get_random_string
 
+# the model should have fields to store the narrative text, job seeker's ID (to link the narrative to a specific user), and dates
+class JobSeekerNarrative(models.Model):
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
+    narrative_text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
 
 class Company(models.Model):
     name = models.CharField(max_length=255)

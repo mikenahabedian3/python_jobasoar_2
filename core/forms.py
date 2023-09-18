@@ -3,6 +3,17 @@ import xml.etree.ElementTree as ET
 from django.db import transaction
 from django.utils.dateparse import parse_datetime
 from .models import Job, Company
+from .models import JobSeekerNarrative
+
+
+class JobSeekerNarrativeForm(forms.ModelForm):
+    class Meta:
+        model = JobSeekerNarrative
+        fields = ['narrative_text']
+        widgets = {
+            'narrative_text': forms.Textarea(attrs={'cols': 80, 'rows': 20}),
+        }
+        
 
 class XMLUploadForm(forms.Form):
     xml_file = forms.FileField()

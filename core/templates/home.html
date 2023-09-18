@@ -6,6 +6,10 @@
   <h1>Home Page</h1>
   <div class="story-box">
     <label for="story" class="story-label">Tell your story to Jobasoar AI and he'll try to find you a job</label>
-    <textarea id="story" name="story" rows="10" cols="30" class="story-textarea" placeholder="Start typing your story..."></textarea>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.narrative_text }}
+        <button type="submit">Submit</button>
+    </form>
   </div>
 {% endblock %}
