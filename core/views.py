@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.db import models
 
 from .forms import XMLUploadForm, parse_xml
 from .models import Job, Company  # Importing Company model here
@@ -35,7 +36,12 @@ def upload_xml(request):
             return redirect('job_list')
     else:
         form = XMLUploadForm()
-    return render(request, 'core/upload_xml.html', {'form': form})
+
+    # Get a list of companies along with the count of jobs associated with them
+    companies_with_jobs = Company.objects.annotate(job_count=models.Count('job'))
+
+    return render(request, 'core/upload_xml.html', {'form': form, 'companies_with_jobs': companies_with_jobs})
+
 
 def job_list(request):
     jobs = Job.objects.all()

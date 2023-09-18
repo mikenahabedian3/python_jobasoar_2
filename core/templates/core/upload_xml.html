@@ -1,9 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Upload</button>
-</form>
+<div>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Upload</button>
+    </form>
+</div>
+
+{% if companies_with_jobs %}
+    <div>
+        <h2>Companies with uploaded XML files</h2>
+        <ul>
+            {% for company in companies_with_jobs %}
+                {% if company.job_count > 0 %}
+                    <li>{{ company.name }}: {{ company.job_count }} job(s) uploaded</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
 {% endblock %}
