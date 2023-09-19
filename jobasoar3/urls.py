@@ -14,6 +14,7 @@ urlpatterns = [
     path('upload_xml/', views.upload_xml, name='upload_xml'),
     path('jobs/', views.job_list, name='job_list'),
     path('jobs/<str:reference_id>/', views.job_detail, name='job_detail'),  # Only reference_id pattern
+    path('process_narrative/', views.process_narrative_view, name='process_narrative'),  # New URL pattern for process_narrative_view
 ]
 
 if settings.DEBUG:
