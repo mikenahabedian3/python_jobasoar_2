@@ -3,13 +3,20 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-  <h1>Home Page</h1>
+  <div class="text-center my-4">
+    <h1 style="color: lime;">Welcome to Jobasoar</h1>
+    <p class="text-muted">Where your story leads you to your dream job</p>
+  </div>
   <div class="story-box">
-    <label for="story" class="story-label">Tell your story to Jobasoar AI and he'll try to find you a job</label>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.narrative_text }}
-        <button type="submit">Submit</button>
+    <form method="post" action="{% url 'receive_narrative' %}" class="mx-auto" style="max-width: 500px; background-color: #222; padding: 20px; border-radius: 15px;">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="id_narrative_text" class="story-label">Share your story with Jobasoar AI</label>
+        <textarea name="narrative_text" id="id_narrative_text" class="form-control story-textarea" rows="5" placeholder="Tell us your journey, skills, aspirations..."></textarea>
+      </div>
+      <div class="form-group text-center">
+        <button type="submit" class="btn btn-primary mt-2" style="background-color: purple; border-color: purple;">Begin Your Journey</button>
+      </div>
     </form>
   </div>
 {% endblock %}

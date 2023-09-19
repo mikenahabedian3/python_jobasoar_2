@@ -7,6 +7,22 @@ from .forms import XMLUploadForm, parse_xml, JobSeekerNarrativeForm
 from .models import Job, Company
 from .gpt3_setup import process_narrative
 
+from django.views.decorators.csrf import csrf_exempt
+
+
+
+
+@csrf_exempt
+def receive_narrative(request):
+    if request.method == "POST":
+        narrative_text = request.POST.get('narrative_text')
+        # Here, you will later add code to send the narrative_text to the GPT-4 for processing
+        return JsonResponse({'message': 'Narrative received'})
+    else:
+        return JsonResponse({'message': 'Wrong request method'}, status=400)
+
+
+
 def home(request):
     if request.method == "POST":
         form = JobSeekerNarrativeForm(request.POST)

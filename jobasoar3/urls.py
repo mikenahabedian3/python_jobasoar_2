@@ -1,4 +1,3 @@
-# jobasoar3/jobasoar3/urls.py
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -15,6 +14,7 @@ urlpatterns = [
     path('jobs/', views.job_list, name='job_list'),
     path('jobs/<str:reference_id>/', views.job_detail, name='job_detail'),  # Only reference_id pattern
     path('process_narrative/', views.process_narrative_view, name='process_narrative'),  # New URL pattern for process_narrative_view
+    path('receive_narrative/', views.receive_narrative, name='receive_narrative'),  # The URL pattern for your new view
 ]
 
 if settings.DEBUG:
