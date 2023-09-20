@@ -60,3 +60,10 @@ class Job(models.Model):
 
     def __str__(self):
         return self.title
+        
+
+class Narrative(models.Model):
+    text = models.TextField()
+    processed_text = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

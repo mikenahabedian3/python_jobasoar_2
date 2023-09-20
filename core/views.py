@@ -2,31 +2,32 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db import models
 from django.http import JsonResponse
-
-from .forms import XMLUploadForm, parse_xml, JobSeekerNarrativeForm
-from .models import Job, Company
 from django.views.decorators.csrf import csrf_exempt
+from .forms import XMLUploadForm, JobSeekerNarrativeForm, parse_xml
+from .models import Job, Company, Narrative
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
+
+# Initialize the GPT-2 model and tokenizer once to improve performance
+model_name = "gpt2-medium"
+model = GPT2LMHeadModel.from_pretrained(model_name)
+tokenizer = GPT2Tokenizer.from_pretrained(model_name)
+
+def process_narrative(narrative_text):
+    inputs = tokenizer.encode(narrative_text, return_tensors='pt')
+    outputs = model.generate(inputs, max_length=150, num_return_sequences=1, temperature=1.0)
+    processed_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    return processed_text
 
 @csrf_exempt
 def receive_narrative(request):
     if request.method == "POST":
         narrative_text = request.POST.get('narrative_text')
         processed_narrative = process_narrative(narrative_text)
-        return JsonResponse({'message': 'Narrative received', 'processed_narrative': processed_narrative})
+        new_narrative = Narrative(text=narrative_text, processed_text=processed_narrative)
+        new_narrative.save()
+        return JsonResponse({'message': 'Narrative received and saved', 'processed_narrative': processed_narrative})
     else:
         return JsonResponse({'message': 'Wrong request method'}, status=400)
-
-def process_narrative(narrative):
-    model_name = "gpt2-medium"
-    model = GPT2LMHeadModel.from_pretrained(model_name)
-    tokenizer = GPT2Tokenizer.from_pretrained(model_name)
-    
-    inputs = tokenizer.encode(narrative, return_tensors='pt')
-    outputs = model.generate(inputs, max_length=150, num_return_sequences=1, temperature=1.0)
-    processed_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    
-    return processed_text
 
 def home(request):
     if request.method == "POST":
@@ -38,7 +39,6 @@ def home(request):
             return redirect('dashboard')
     else:
         form = JobSeekerNarrativeForm()
-
     return render(request, 'home.html', {'form': form})
 
 @login_required
@@ -54,9 +54,7 @@ def upload_xml(request):
             return redirect('job_list')
     else:
         form = XMLUploadForm()
-
     companies_with_jobs = Company.objects.annotate(job_count=models.Count('job'))
-
     return render(request, 'core/upload_xml.html', {'form': form, 'companies_with_jobs': companies_with_jobs})
 
 def job_list(request):
@@ -71,9 +69,7 @@ def process_narrative_view(request):
     if request.method == 'POST':
         narrative_text = request.POST.get('narrative_text', '')
         processed_text = process_narrative(narrative_text)
-        response_data = {
-            'processed_text': processed_text
-        }
+        response_data = {'processed_text': processed_text}
         return JsonResponse(response_data)
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
