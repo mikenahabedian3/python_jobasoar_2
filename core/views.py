@@ -5,31 +5,10 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .forms import XMLUploadForm, JobSeekerNarrativeForm, parse_xml
 from .models import Job, Company, Narrative
-from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
-# Initialize the GPT-2 model and tokenizer once to improve performance
-model_name = "gpt2-medium"
-model = GPT2LMHeadModel.from_pretrained(model_name)
-tokenizer = GPT2Tokenizer.from_pretrained(model_name)
+import spacy
 
-def process_narrative(narrative):
-    model_name = "gpt2-medium"
-    model = GPT2LMHeadModel.from_pretrained(model_name)
-    tokenizer = GPT2Tokenizer.from_pretrained(model_name)
-    
-    inputs = tokenizer.encode(narrative, return_tensors='pt')
-    outputs = model.generate(
-        inputs, 
-        max_length=150, 
-        num_return_sequences=1, 
-        temperature=0.5,
-        no_repeat_ngram_size=2
-    )
-    processed_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    
-    return processed_text
-
-
+nlp = spacy.load("en_core_web_sm")
 
 @csrf_exempt
 def receive_narrative(request):
@@ -38,9 +17,38 @@ def receive_narrative(request):
         processed_narrative = process_narrative(narrative_text)
         new_narrative = Narrative(text=narrative_text, processed_text=processed_narrative)
         new_narrative.save()
-        return JsonResponse({'message': 'Narrative received and saved', 'processed_narrative': processed_narrative})
+        return JsonResponse({'message': 'Narrative received and saved', 'original_narrative': narrative_text, 'processed_narrative': processed_narrative})
     else:
         return JsonResponse({'message': 'Wrong request method'}, status=400)
+
+
+
+
+def process_narrative(narrative):
+    doc = nlp(narrative)
+
+    # Create a list to store the processed elements of the narrative
+    processed_elements = []
+
+    # Identify and add named entities to the processed elements list
+    for ent in doc.ents:
+        if ent.label_ not in ["DATE", "PERCENT", "CARDINAL"]:
+            processed_elements.append(ent.text)
+
+    # Identify and add unique noun phrases to the processed elements, excluding certain words
+    for chunk in doc.noun_chunks:
+        non_stop_words_in_chunk = [token.text for token in chunk if not token.is_stop and not token.is_punct and not token.text.lower() in ('i', 'me', 'my', 'mine', 'we', 'us', 'our', 'ours')]
+        
+        if non_stop_words_in_chunk:
+            processed_elements.append(" ".join(non_stop_words_in_chunk))
+
+    # Combine the processed elements to form the final processed narrative
+    processed_text = " ".join(set(processed_elements))
+
+    return processed_text
+
+
+
 
 def home(request):
     if request.method == "POST":
