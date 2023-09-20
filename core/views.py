@@ -5,23 +5,28 @@ from django.http import JsonResponse
 
 from .forms import XMLUploadForm, parse_xml, JobSeekerNarrativeForm
 from .models import Job, Company
-from .gpt3_setup import process_narrative
-
 from django.views.decorators.csrf import csrf_exempt
-
-
-
+from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
 @csrf_exempt
 def receive_narrative(request):
     if request.method == "POST":
         narrative_text = request.POST.get('narrative_text')
-        # Here, you will later add code to send the narrative_text to the GPT-4 for processing
-        return JsonResponse({'message': 'Narrative received'})
+        processed_narrative = process_narrative(narrative_text)
+        return JsonResponse({'message': 'Narrative received', 'processed_narrative': processed_narrative})
     else:
         return JsonResponse({'message': 'Wrong request method'}, status=400)
 
-
+def process_narrative(narrative):
+    model_name = "gpt2-medium"
+    model = GPT2LMHeadModel.from_pretrained(model_name)
+    tokenizer = GPT2Tokenizer.from_pretrained(model_name)
+    
+    inputs = tokenizer.encode(narrative, return_tensors='pt')
+    outputs = model.generate(inputs, max_length=150, num_return_sequences=1, temperature=1.0)
+    processed_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    
+    return processed_text
 
 def home(request):
     if request.method == "POST":
@@ -65,9 +70,9 @@ def job_detail(request, reference_id):
 def process_narrative_view(request):
     if request.method == 'POST':
         narrative_text = request.POST.get('narrative_text', '')
-        embeddings = process_narrative(narrative_text)
+        processed_text = process_narrative(narrative_text)
         response_data = {
-            'embeddings_shape': embeddings.shape
+            'processed_text': processed_text
         }
         return JsonResponse(response_data)
     else:

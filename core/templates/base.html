@@ -5,10 +5,15 @@
 <head>
   <title>{% block title %}{% endblock %}</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+  
+  <!-- Added Roboto font link -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
   <style>
     body, html {
-      background-color: black;
+      background-color: white; /* Updated the background color to white */
       color: purple;
+      font-family: 'Roboto', sans-serif; /* Applied Roboto font globally */
     }
 
     header {
@@ -17,6 +22,7 @@
       align-items: center;
       border-bottom: 1px solid purple;
       padding: 10px;
+      background-color: greenyellow; /* Updated the background color to greenyellow */
     }
 
     header nav ul {
@@ -57,30 +63,30 @@
       color: lime;
     }
 
-      .story-box {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+    .story-box {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-  .story-label {
-    font-size: 1.2em;
-    margin-bottom: 10px;
-    color: lime;  /* Or any other color you prefer */
-  }
+    .story-label {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      color: lime;  /* Or any other color you prefer */
+    }
 
-  .story-textarea {
-    width: 60%;  /* Adjust as necessary */
-    height: 200px;  /* Adjust as necessary */
-    padding: 10px;
-    border-radius: 10px;  /* Optional: for rounded corners */
-    border: 2px solid purple;  /* Adjust as necessary */
-    font-size: 1em;
-    color: purple;  /* Adjust as necessary */
-    background-color: black;  /* Adjust as necessary */
-  }
-</style>
+    .story-textarea {
+      width: 60%;  /* Adjust as necessary */
+      height: 200px;  /* Adjust as necessary */
+      padding: 10px;
+      border-radius: 10px;  /* Optional: for rounded corners */
+      border: 2px solid purple;  /* Adjust as necessary */
+      font-size: 1em;
+      color: purple;  /* Adjust as necessary */
+      background-color: white;  /* Updated the background color to white */
+    }
+  </style>
 </head>
 
 <body>

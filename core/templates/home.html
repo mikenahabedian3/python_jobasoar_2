@@ -3,20 +3,16 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-  <div class="text-center my-4">
-    <h1 style="color: lime;">Welcome to Jobasoar</h1>
-    <p class="text-muted">Where your story leads you to your dream job</p>
-  </div>
-  <div class="story-box">
-    <form method="post" action="{% url 'receive_narrative' %}" class="mx-auto" style="max-width: 500px; background-color: #222; padding: 20px; border-radius: 15px;">
-      {% csrf_token %}
-      <div class="form-group">
-        <label for="id_narrative_text" class="story-label">Share your story with Jobasoar AI</label>
-        <textarea name="narrative_text" id="id_narrative_text" class="form-control story-textarea" rows="5" placeholder="Tell us your journey, skills, aspirations..."></textarea>
-      </div>
-      <div class="form-group text-center">
-        <button type="submit" class="btn btn-primary mt-2" style="background-color: purple; border-color: purple;">Begin Your Journey</button>
-      </div>
-    </form>
-  </div>
+<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 70vh;">
+    <h1 style="color: purple; font-family: 'Roboto', sans-serif;">Welcome to Jobasoar</h1>
+    <p class="text-muted" style="font-family: 'Roboto', sans-serif;">Where your story leads you to your dream job</p>
+
+    <div class="search-box" style="margin-top: 20px;">
+        <form method="post" action="{% url 'receive_narrative' %}" style="display: flex; align-items: center; border: 1px solid #ccc; padding: 20px; border-radius: 20px; max-width: 800px; width: 100%;">
+            {% csrf_token %}
+            <input type="text" name="narrative_text" id="id_narrative_text" class="form-control" style="border: none; flex-grow: 1; font-family: 'Roboto', sans-serif; font-size: 1.2em; padding: 10px;" placeholder="Tell us your journey, skills, aspirations..." />
+            <button type="submit" class="btn btn-primary" style="background-color: purple; border-color: purple; margin-left: 10px; font-family: 'Roboto', sans-serif;">Search</button>
+        </form>
+    </div>
+</div>
 {% endblock %}
