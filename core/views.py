@@ -12,11 +12,24 @@ model_name = "gpt2-medium"
 model = GPT2LMHeadModel.from_pretrained(model_name)
 tokenizer = GPT2Tokenizer.from_pretrained(model_name)
 
-def process_narrative(narrative_text):
-    inputs = tokenizer.encode(narrative_text, return_tensors='pt')
-    outputs = model.generate(inputs, max_length=150, num_return_sequences=1, temperature=1.0)
+def process_narrative(narrative):
+    model_name = "gpt2-medium"
+    model = GPT2LMHeadModel.from_pretrained(model_name)
+    tokenizer = GPT2Tokenizer.from_pretrained(model_name)
+    
+    inputs = tokenizer.encode(narrative, return_tensors='pt')
+    outputs = model.generate(
+        inputs, 
+        max_length=150, 
+        num_return_sequences=1, 
+        temperature=0.5,
+        no_repeat_ngram_size=2
+    )
     processed_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    
     return processed_text
+
+
 
 @csrf_exempt
 def receive_narrative(request):
